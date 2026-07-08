@@ -898,7 +898,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      onboard_organization: {
+        Args: {
+          p_city?: string
+          p_clinic_name: string
+          p_country?: string
+          p_full_name: string
+          p_timezone?: string
+          p_whatsapp?: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never

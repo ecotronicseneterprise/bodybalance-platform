@@ -9,7 +9,12 @@ Working state for the implementation of BLUEPRINT.md v1.0. Updated continuously.
 - [x] Task 2 (code): 7 migrations (16 tables, RLS everywhere, triggers) + idempotent seed (Cherry + demo org) + ai_profiles.json
 - [x] Task 2 (apply): 7 migrations pushed to `bodybalance-platform` (cklgjwqhnttrpggnfpgy), seeded, guard suite 5/5 OK — 2026-07-08
 - [ ] Sprint 4 carry-over: migrate data/knowledge_base.jsonl content into knowledge_documents WITH embeddings (needs LLM key + embedding pipeline)
-- [ ] Task 3 prerequisite: staff users seeding happens through Supabase Auth signup (auth.users FK), not seed.sql
+- [x] Task 3: auth + org context — verify-auth 4/4 live (anon-key sign-in, org resolution, 2× cross-tenant isolation)
+- [x] Task 4: domain layer + event bus + audit subscribers — verify-domain 5/5 live (slots, pending booking, double-booking refused, AI transition refused, audit trail)
+- [x] Task 5 (part 1): self-serve onboarding — signup → email verify → create clinic → first user = owner. Live-verified 6/6. (Founder decision: NO manually created owners; Cherry signs up through the real flow.)
+- [ ] Task 5 (part 2): dashboard nav foundation (sections skeleton for Sprint 2)
+- [ ] Pre-launch: run `node scripts/cleanup-test-data.mjs --wipe-demo=all` to remove demo org + any test users, then Cherry signs up fresh at /signup
+- [ ] Cherry onboarding note: seeded `bodybalance` org will be superseded by her self-created clinic; the seeded org gets wiped with the demo data before launch
 - [ ] Task 3: Auth (Supabase Auth) + organization context resolution
 - [ ] Task 4: Domain layer (`packages/domain` services + repositories) + event bus (`packages/events`) + audit log subscriber
 - [ ] Task 5: Admin dashboard foundation

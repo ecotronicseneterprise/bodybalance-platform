@@ -1,9 +1,12 @@
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 /**
  * Protected admin home. Middleware guarantees a session; this resolves the
  * staff member's organization context through their users row — RLS-scoped,
  * so a staff account can only ever see its own clinic (BLUEPRINT 2.1).
+ * A verified user with no clinic yet is sent into onboarding — the same
+ * self-serve flow every clinic uses.
  */
 export default async function AdminHome() {
   const supabase = await createClient();
@@ -18,22 +21,7 @@ export default async function AdminHome() {
     .eq("id", user!.id)
     .maybeSingle();
 
-  if (!staff) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-3 p-8">
-        <h1 className="text-xl font-semibold">Account not linked</h1>
-        <p className="max-w-md text-center text-sm text-gray-600">
-          Your login exists but is not linked to a clinic staff record. Ask
-          your platform administrator to complete onboarding.
-        </p>
-        <form action="/auth/signout" method="post">
-          <button className="mt-2 rounded-md border border-gray-300 px-4 py-2 text-sm hover:bg-gray-100">
-            Sign out
-          </button>
-        </form>
-      </main>
-    );
-  }
+  if (!staff) redirect("/onboarding");
 
   const org = staff.organizations;
 

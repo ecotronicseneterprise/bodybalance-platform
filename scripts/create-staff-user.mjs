@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 /**
- * Creates a staff account: Supabase Auth user + linked public.users row.
- * Platform-admin operation (service role) — used until self-serve onboarding
- * exists (Sprint 2A). Password is prompted, never passed as an argument
- * (keeps it out of shell history).
+ * TEST-ONLY staff account creation (founder decision 2026-07-08: real owners
+ * are created exclusively through the self-serve signup + onboarding flow).
+ *
+ * Guard: the email MUST contain '+test' or end in '.invalid' so test users
+ * are unmistakable and removable by scripts/cleanup-test-data.mjs.
  *
  * Usage:
- *   node scripts/create-staff-user.mjs <email> <full name> <org-slug> <role>
- * Example:
- *   node scripts/create-staff-user.mjs cherry@example.com "Cherry Nwanna" bodybalance owner
+ *   node scripts/create-staff-user.mjs <email> "<full name>" <org-slug> <role>
  */
 import { readFileSync } from "node:fs";
 import { createInterface } from "node:readline/promises";
@@ -18,6 +17,14 @@ const [email, fullName, orgSlug, role] = process.argv.slice(2);
 if (!email || !fullName || !orgSlug || !role) {
   console.error(
     'Usage: node scripts/create-staff-user.mjs <email> "<full name>" <org-slug> <owner|therapist|receptionist|admin>',
+  );
+  process.exit(1);
+}
+
+if (!email.includes("+test") && !email.endsWith(".invalid")) {
+  console.error(
+    "REFUSED: this script is TEST-ONLY. Real staff join via signup + onboarding.\n" +
+      "Test emails must contain '+test' or end in '.invalid' (cleanable by cleanup-test-data.mjs).",
   );
   process.exit(1);
 }
