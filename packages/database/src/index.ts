@@ -6,6 +6,6 @@
  * factories for session handling; they never query business tables directly.
  */
 
-export type { Database, Tables, TablesInsert, TablesUpdate } from "./types.gen";
-export { createServiceClient } from "./service-client";
-export { getPool, withOrgContext } from "./org-context";
+export type { Database, Tables, TablesInsert, TablesUpdate } from "./types.gen.ts";
+export { createServiceClient } from "./service-client.ts";
+export { getPool, withOrgContext, orgRunner } from "./org-context.ts";

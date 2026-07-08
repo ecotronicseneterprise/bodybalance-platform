@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "./types.gen";
+import type { Database } from "./types.gen.ts";
 
 /**
  * Service-role client — SERVER ONLY, bypasses RLS. Used exclusively for

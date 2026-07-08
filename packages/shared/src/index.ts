@@ -37,3 +37,19 @@ export type ContentType =
   | "testimonial";
 
 export type BookingStyle = "book_immediately" | "assessment_first" | "call_first";
+
+/**
+ * Minimal database client surface shared between @bodybalance/database
+ * (which produces it from a pg connection) and @bodybalance/domain
+ * repositories (which consume it). Keeps domain free of a direct pg
+ * dependency (BLUEPRINT 4.2 layering).
+ */
+export interface DbClient {
+  query(
+    text: string,
+    params?: unknown[],
+  ): Promise<{ rows: unknown[]; rowCount: number | null }>;
+}
+
+/** Runs a function inside an RLS-enforced, org-scoped transaction. */
+export type DbRunner = <T>(fn: (client: DbClient) => Promise<T>) => Promise<T>;

@@ -1,5 +1,5 @@
 import pg from "pg";
-import type { OrganizationId } from "@bodybalance/shared";
+import type { DbRunner, OrganizationId } from "@bodybalance/shared";
 
 /**
  * RLS-enforced server data path (BLUEPRINT 2.1, migration 20260708150000).
@@ -22,6 +22,11 @@ export function getPool(connectionString: string): pg.Pool {
     ssl: { rejectUnauthorized: false },
   });
   return pool;
+}
+
+/** Convenience: a reusable org-scoped runner for domain services. */
+export function orgRunner(pool: pg.Pool, organizationId: OrganizationId): DbRunner {
+  return (fn) => withOrgContext(pool, organizationId, (client) => fn(client));
 }
 
 export async function withOrgContext<T>(
