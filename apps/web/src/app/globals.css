@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+/* Tenant branding (clinic_settings.brand_color_*) is injected as CSS custom
+   properties at render time in later sprints — never hardcoded per clinic.
+   These are neutral platform defaults only. */
+:root {
+  --brand-primary: #1b5e20;
+  --brand-secondary: #66bb6a;
+}

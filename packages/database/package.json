@@ -1,0 +1,17 @@
+{
+  "name": "@bodybalance/database",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Supabase client, generated types, low-level query layer. Consumed ONLY by @bodybalance/domain — never by @bodybalance/ai or apps directly (BLUEPRINT 4.1, 4.2).",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bodybalance/shared": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

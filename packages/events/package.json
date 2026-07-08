@@ -1,0 +1,17 @@
+{
+  "name": "@bodybalance/events",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Domain event definitions + lightweight in-process publish/subscribe (BLUEPRINT 3.15). Safety logic never depends on event delivery.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bodybalance/shared": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

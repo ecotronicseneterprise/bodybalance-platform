@@ -66,3 +66,12 @@ desktop.ini
 tmp/
 temp/
 *.tmp
+
+# Node / monorepo (BodyBalance Platform — BLUEPRINT.md v1.0)
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+.vercel/
