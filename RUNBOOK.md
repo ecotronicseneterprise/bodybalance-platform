@@ -23,11 +23,20 @@ didn't happen.
 
 ## Environment variables
 
-None required yet. Will be added per task:
+Generated into `apps/admin/.env.local` and `apps/web/.env.local` (both
+gitignored) by `node scripts/write-env.mjs` from `.secrets/` files. Re-run
+after any key rotation.
 
 | Variable | Used by | Added in | Notes |
 |---|---|---|---|
-| _(none yet)_ | | | |
+| `NEXT_PUBLIC_SUPABASE_URL` | both apps | Task 3 | public |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | both apps (auth, RLS-scoped reads) | Task 3 | public by design — "Publishable key" in new dashboard naming; source: `.secrets/anon-key.txt` |
+| `SUPABASE_SERVICE_ROLE_KEY` | server only (auth admin, platform jobs) | Task 3 | SECRET — bypasses RLS; source: `.secrets/service-role-key.txt` |
+| `DATABASE_URL` | server only (`withOrgContext` RLS-enforced path) | Task 3 | SECRET — IPv4 session pooler, `postgres.<ref>` user |
+
+Staff account creation (until Sprint 2A self-serve onboarding):
+`node scripts/create-staff-user.mjs <email> "<full name>" <org-slug> <role>`
+(prompts for password; or set `BB_STAFF_PASSWORD` env var for non-interactive use).
 
 ## External services
 

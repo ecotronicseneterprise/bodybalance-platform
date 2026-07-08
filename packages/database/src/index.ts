@@ -1,13 +1,11 @@
 /**
- * @bodybalance/database — Supabase client + generated types (BLUEPRINT 4.1).
+ * @bodybalance/database — Supabase clients + generated types (BLUEPRINT 4.1).
  *
- * LAYERING RULE (BLUEPRINT 4.2): this package is imported ONLY by
- * @bodybalance/domain repositories. If @bodybalance/ai or an app imports it
- * directly, that is a defect against the blueprint.
- *
- * Implemented in Task 2 (Supabase setup) and Task 3 (auth/org context):
- *  - createServerClient() with organization context resolution
- *  - generated Database types from supabase/migrations
+ * LAYERING RULE (BLUEPRINT 4.2): business data access goes through
+ * @bodybalance/domain repositories only. Apps may import auth-related client
+ * factories for session handling; they never query business tables directly.
  */
 
-export const DATABASE_PACKAGE_READY = false as const;
+export type { Database, Tables, TablesInsert, TablesUpdate } from "./types.gen";
+export { createServiceClient } from "./service-client";
+export { getPool, withOrgContext } from "./org-context";

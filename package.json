@@ -12,6 +12,7 @@
     "dev:admin": "npm run dev --workspace @bodybalance/admin",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
     "lint": "eslint apps packages --ext .ts,.tsx"
   },
   "devDependencies": {

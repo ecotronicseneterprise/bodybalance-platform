@@ -1,9 +1,14 @@
 # BodyBalance Platform — Product & Technical Blueprint
 
-**Status:** v1.0 — APPROVED. Frozen. Implementation begins against this version.
+**Status:** v1.1 — APPROVED (v1.0 + one founder amendment during Sprint 1). Implementation continues against this version.
 **Owner:** Clifford (Ecotronics)
 **First customer:** Cherry Nwanna, BMR.PT — BodyBalance Physiotherapy Clinic, Lagos
 **Date approved:** 2026-07-08
+
+**Amendment v1.0 → v1.1 (founder-directed, 2026-07-08):**
+1. **New section 5.7 — AI context privacy (PII firewall).** The LLM never receives patient identifiers; it receives only sanitized, clinically relevant structured context. Implemented as a reusable `packages/privacy` component (added to 4.1) sitting between the patient and the model: PII Sanitizer → Clinical Context Builder → LLM.
+2. **Sprint 2 split** (section 10): Sprint 2A = clinic onboarding/configuration (org, brand, therapists, services, AI settings, knowledge upload); Sprint 2B = operations dashboard (appointments, patients, analytics, audit, resources).
+3. **Feature flags:** the founder's `organization_features` requirement is **satisfied by the existing `ai_capabilities` flag map (3.13b)** — one mechanism, already live. A normalized `organization_features` table is recorded as an evolve-later refactor (if per-flag audit metadata is ever needed), not a second parallel mechanism.
 
 > **This blueprint is frozen as v1.0.** Planning is done — every hour spent re-planning past this point has diminishing returns relative to building. Further changes are real amendments, not drafting: bump to v1.1/v1.2 for additions/clarifications discovered during implementation, v2.0 only for a genuine architectural reversal. Don't keep silently editing v1.0 in place. See section 10 for the sprint plan this version executes against.
 
@@ -395,6 +400,7 @@ packages/
     ai/          — LLM orchestration: prompt templates, RAG, guardrails, tool/function definitions (calls domain/ only — see 4.2)
     domain/      — Domain services + repositories: BookingService, AvailabilityService, PatientService, KnowledgeService, etc. (see 4.2)
     events/      — Domain event definitions + publish/subscribe (see 3.15)
+    privacy/     — PII firewall: sanitizer + clinical context builder (see 5.7, v1.1); platform-level, reusable across future AI products
     ui/          — Shared component library (brand-configurable via clinic_settings)
     database/    — Supabase client, generated types, low-level query layer (used only by packages/domain, never called directly by packages/ai or apps/*)
     shared/      — Types, constants, validation schemas shared across apps
@@ -514,6 +520,51 @@ No config value, prompt template variable, or feature flag in Layer 2 may weaken
 
 Per section 3.14's three-layer architecture, any AI-generated business insight ("consider a discounted knee assessment campaign," the Weekly AI Brief in 3.14b) is produced exclusively from **Layer 1 (SQL) and Layer 2 (deterministic business-rule classification) output already written to `analytics_snapshots`** — never from raw session/message data, and never computed by the LLM itself. The Layer 3 narrator prompt receives only pre-aggregated, pre-classified numbers as input and is given no tool, retrieval, or database access to compute or look up anything further. This keeps "the AI helps Cherry run her business" from becoming a second, less-guarded hallucination surface alongside the patient-facing chat — and guarantees a number on the dashboard and the same number narrated in a Brief can never disagree, since both read the same `analytics_snapshots` row.
 
+### 5.7 AI context privacy — the PII firewall (added v1.1)
+
+The LLM never needs to know who the patient is, so it never learns it. A
+reusable privacy layer (`packages/privacy`, section 4.1) sits between the
+patient and every model call:
+
+```
+Patient message / session state
+        ↓
+PII Sanitizer        — detects and masks identifiers in free text
+        ↓
+Clinical Context Builder — reconstructs what the model needs as structured,
+        ↓                  non-identifiable fields
+LLM
+```
+
+**The model MAY receive (clinically relevant, non-identifying):** age range
+(`18-25 / 26-35 / 36-45 / 46-60 / 60+` — never date of birth), sex (only when
+clinically relevant), pregnancy status (only when relevant), occupation, pain
+location, pain duration, pain severity (1–10), symptoms, activity limitations,
+previous injuries, patient goals.
+
+**The model must NEVER receive:** name, email, phone, home address, GPS
+coordinates, date of birth, national ID, insurance ID, payment information,
+appointment IDs, IP address, device identifiers, or therapist notes containing
+identifiers.
+
+Architectural notes:
+- Patient contact details are collected by the **structured booking form**,
+  never parsed by the LLM out of chat — so identifiers never need to transit
+  the model to make a booking. `create_booking` (5.4) receives them
+  server-side, outside the prompt.
+- If a patient volunteers PII in free text ("My name is John, my number is
+  0803…"), the sanitizer masks it before the model sees the message. Pattern
+  detection (emails, phones, DOBs, IDs) is deterministic; free-text *names*
+  cannot be perfectly detected by any sanitizer — mitigated by (a) the AI
+  never asking for identifying details (prompt rule) and (b) masking known
+  session identifiers (anything the patient already entered into the booking
+  form) wherever they appear in later text.
+- `packages/privacy` is platform infrastructure (Layer 1, 5.5): no clinic
+  configuration can weaken it. It is deliberately reusable for future AI
+  products beyond BodyBalance.
+- This extends, and does not replace, the BMI-bucket data-minimization
+  pattern (section 6).
+
 ---
 
 ## 6. Safety, compliance, and privacy carryovers
@@ -584,8 +635,9 @@ This blueprint is executed one sprint at a time, not as a single "build BodyBala
 ### Sprint 1 — Foundation
 Monorepo scaffold (4.1) · Next.js apps · Supabase project + full schema (section 3, all tables through 3.18) · RLS policies · auth (Supabase Auth, org context resolution) · seed data (Cherry's org + dev demo org) · `packages/domain` skeleton + repositories (4.2) · `packages/events` skeleton (3.15) · `audit_logs` wired to event subscribers (3.16).
 
-### Sprint 2 — Admin
-Clinic onboarding flow (including AI Profile selection, 3.13c) · therapists · services/pricing · availability management · knowledge base management (with versioning, 3.17) · `organization_ai_settings`/`ai_capabilities` editing UI — with `platform_policy` (3.13a) fields confirmed absent from every admin screen.
+### Sprint 2 — Admin (split v1.1)
+**Sprint 2A — Clinic onboarding & configuration:** onboarding flow (including AI Profile selection, 3.13c) · organization/brand settings · therapists · services/pricing · availability management · `organization_ai_settings`/`ai_capabilities` editing UI · knowledge upload (with versioning, 3.17) — with `platform_policy` (3.13a) fields confirmed absent from every admin screen.
+**Sprint 2B — Operations dashboard:** appointments queues (pending/confirmed/cancelled, accept/reschedule/decline with qualification summary) · patient list · analytics views · audit log viewer · approved resources management.
 
 ### Sprint 3 — Patient experience
 Landing page (tenant-aware via `clinic_settings`) · AI qualification flow (1.5) · in-app booking (pending-confirmation flow, qualification-summary pre-fill) · notifications (WhatsApp + email, wired to `AppointmentConfirmed`/etc. events, never AI-generated "confirmed" language).
