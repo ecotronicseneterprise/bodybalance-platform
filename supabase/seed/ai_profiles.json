@@ -1,0 +1,60 @@
+{
+  "$comment": "AI Profiles (BLUEPRINT 3.13c) — onboarding presets applied to organization_ai_settings at clinic creation. Data, not code: adding a profile is an edit here, not a migration. Consumed by the onboarding flow (Sprint 2/Phase 3).",
+  "profiles": [
+    {
+      "id": "general_physiotherapy",
+      "label": "General Physiotherapy",
+      "tone": "warm",
+      "verbosity": "brief",
+      "specialties": ["general", "orthopaedics"],
+      "booking_style": "assessment_first",
+      "suggested_services": ["Initial Assessment", "Follow-up Session", "Virtual Consultation"]
+    },
+    {
+      "id": "sports_performance",
+      "label": "Sports Performance Clinic",
+      "tone": "friendly",
+      "verbosity": "brief",
+      "specialties": ["sports", "orthopaedics"],
+      "booking_style": "book_immediately",
+      "suggested_services": ["Sports Injury Assessment", "Return-to-Play Program", "Performance Screening"]
+    },
+    {
+      "id": "neuro_rehab",
+      "label": "Neurological Rehabilitation",
+      "tone": "clinical",
+      "verbosity": "detailed",
+      "specialties": ["neuro_rehab"],
+      "booking_style": "call_first",
+      "suggested_services": ["Neurological Assessment", "Stroke Rehabilitation Session", "Balance & Gait Training"]
+    },
+    {
+      "id": "paediatric",
+      "label": "Paediatric Physiotherapy",
+      "tone": "warm",
+      "verbosity": "detailed",
+      "specialties": ["paediatric"],
+      "booking_style": "call_first",
+      "suggested_services": ["Paediatric Assessment", "Developmental Movement Session"],
+      "$note": "Declaring the paediatric specialty is the ONLY documented exception that lifts BLUEPRINT 5.2 rule 9's paediatric restriction, per 3.13/5.5."
+    },
+    {
+      "id": "womens_health",
+      "label": "Women's Health",
+      "tone": "warm",
+      "verbosity": "detailed",
+      "specialties": ["womens_health"],
+      "booking_style": "assessment_first",
+      "suggested_services": ["Women's Health Assessment", "Pre/Postnatal Session", "Pelvic Floor Rehabilitation"]
+    },
+    {
+      "id": "corporate_ergonomics",
+      "label": "Corporate Ergonomics",
+      "tone": "formal",
+      "verbosity": "brief",
+      "specialties": ["corporate_ergonomics"],
+      "booking_style": "book_immediately",
+      "suggested_services": ["Workstation Assessment", "Corporate Wellness Consultation"]
+    }
+  ]
+}
