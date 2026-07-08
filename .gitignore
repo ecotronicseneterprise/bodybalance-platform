@@ -75,3 +75,8 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .vercel/
+
+# Local secrets — NEVER committed (Supabase access token, DB password, API keys)
+.secrets/
+supabase/.temp/
+supabase/.branches/

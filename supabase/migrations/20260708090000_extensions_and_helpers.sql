@@ -1,6 +1,13 @@
 -- 20260708090000_extensions_and_helpers.sql
 -- BodyBalance Platform — BLUEPRINT.md v1.0, Sprint 1 Task 2.
--- RULE: migrations are additive-only. Never edit this file after commit.
+-- RULE: migrations are additive-only. Never edit this file after it has been
+-- APPLIED to any environment. (Corrected once pre-apply, 2026-07-08: added
+-- check_function_bodies=off — app.current_org_id() forward-references
+-- public.users, created in the next migration. See RUNBOOK manual steps log.)
+
+-- Defer SQL function body validation: helper functions reference tables that
+-- later migrations create. Postgres validates at first execution instead.
+set check_function_bodies = off;
 
 -- pgvector for knowledge embeddings (BLUEPRINT 3.9); btree_gist for the
 -- appointments double-booking exclusion constraint (docs/DB-DECISIONS.md R2).

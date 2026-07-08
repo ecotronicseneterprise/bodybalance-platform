@@ -33,7 +33,20 @@ None required yet. Will be added per task:
 
 | Service | Tier | Status | Added in |
 |---|---|---|---|
-| _(none yet — Supabase project created in Task 2)_ | | | |
+| Supabase — project `bodybalance-platform`, ref `cklgjwqhnttrpggnfpgy`, region `eu-west-2` (London), URL `https://cklgjwqhnttrpggnfpgy.supabase.co` | Free | Created 2026-07-08; migrations not yet applied | Task 2 |
+
+### Secret handling (permanent convention)
+
+Secrets live in `.secrets/` (gitignored) as plain files, read by commands at
+runtime — they never enter git, chat transcripts, or shell history:
+
+| File | Contents | Where to get it |
+|---|---|---|
+| `.secrets/access-token.txt` | Supabase Personal Access Token | supabase.com/dashboard/account/tokens → Generate new token |
+| `.secrets/db-password.txt` | Database password chosen at project creation | your password manager |
+
+Service Role Key and Publishable/Anon key are wired in Task 3 via app env
+files (`.env.local`, also gitignored) — not needed for migrations.
 
 ## Migrations
 
@@ -42,13 +55,23 @@ edited. Changes are always a new migration. Never rewrite history.**
 
 | # | File | Contents | Applied to prod? |
 |---|---|---|---|
-| 1 | `20260708090000_extensions_and_helpers.sql` | pgvector, btree_gist, `app` schema, `app.current_org_id()`, updated_at + append-only trigger functions | ❌ pending project creation |
-| 2 | `20260708090100_core_tenancy.sql` | organizations, clinic_settings, users, therapists, services, therapist_availability | ❌ |
-| 3 | `20260708090200_patients_conversations_appointments.sql` | patients, chat_sessions, messages, appointments (+ double-booking exclusion constraint) | ❌ |
-| 4 | `20260708090300_knowledge_and_resources.sql` | knowledge_documents, knowledge_document_versions (+ auto-version trigger), approved_resources | ❌ |
-| 5 | `20260708090400_ai_settings.sql` | organization_ai_settings (Layer 2 personality; `show_disclaimer` CHECK-locked true) | ❌ |
-| 6 | `20260708090500_audit_and_analytics.sql` | audit_logs (append-only trigger), analytics_snapshots | ❌ |
-| 7 | `20260708090600_rls_policies.sql` | RLS enabled + policies on all 16 tables | ❌ |
+| 1 | `20260708090000_extensions_and_helpers.sql` | pgvector, btree_gist, `app` schema, `app.current_org_id()`, updated_at + append-only trigger functions | ✅ 2026-07-08 |
+| 2 | `20260708090100_core_tenancy.sql` | organizations, clinic_settings, users, therapists, services, therapist_availability | ✅ 2026-07-08 |
+| 3 | `20260708090200_patients_conversations_appointments.sql` | patients, chat_sessions, messages, appointments (+ double-booking exclusion constraint) | ✅ 2026-07-08 |
+| 4 | `20260708090300_knowledge_and_resources.sql` | knowledge_documents, knowledge_document_versions (+ auto-version trigger), approved_resources | ✅ 2026-07-08 |
+| 5 | `20260708090400_ai_settings.sql` | organization_ai_settings (Layer 2 personality; `show_disclaimer` CHECK-locked true) | ✅ 2026-07-08 |
+| 6 | `20260708090500_audit_and_analytics.sql` | audit_logs (append-only trigger), analytics_snapshots | ✅ 2026-07-08 |
+| 7 | `20260708090600_rls_policies.sql` | RLS enabled + policies on all 16 tables | ✅ 2026-07-08 |
+
+Seed applied 2026-07-08 (2 orgs, 2 therapists, 3 services, 11 availability
+windows, 2 AI settings, 4 platform resources). Guard verification 5/5 OK
+(`scripts/verify-guards.sql`): audit append-only, disclaimer lock,
+auto-versioning trigger, double-booking exclusion, RLS anon boundary.
+
+**Connection note:** direct host `db.<ref>.supabase.co` does not resolve from
+this network (IPv6-only); use the IPv4 session pooler
+`aws-1-eu-west-2.pooler.supabase.com:5432`, user `postgres.<ref>`
+(`scripts/db-run.mjs` tries hosts in order automatically).
 
 Seed: `supabase/seed/seed.sql` (idempotent, fixed UUIDs — Cherry org + demo org),
 `supabase/seed/ai_profiles.json` (onboarding presets, BLUEPRINT 3.13c).
@@ -81,6 +104,9 @@ exists, rollback is always a new inverse migration, never an edit.
 | Date | Step | Performed by | Notes |
 |---|---|---|---|
 | 2026-07-08 | Created branch `sprint-1/foundation` | Claude | Sprint 1 work isolated from `main` |
+| 2026-07-08 | Created Supabase project `bodybalance-platform` (ref `cklgjwqhnttrpggnfpgy`, eu-west-2 London, free tier) | Founder | credentials in founder's password manager + `.secrets/` |
+| 2026-07-08 | Corrected migration 1 pre-apply (`check_function_bodies = off`) | Claude | Exception to additive-only rule invoked transparently: migration had never been applied to any environment (failed on first push; transaction rolled back). Rule protects applied history only. |
+| 2026-07-08 | `supabase link` + `db push` (7 migrations) + seed + guard verification (5/5 OK) | Claude | via CLI with `.secrets/` credentials |
 
 ## Accepted risks
 

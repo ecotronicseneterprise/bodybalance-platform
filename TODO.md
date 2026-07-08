@@ -7,7 +7,7 @@ Working state for the implementation of BLUEPRINT.md v1.0. Updated continuously.
 - [x] Task 1: Monorepo + project structure (npm workspaces, apps/web, apps/admin, 6 packages, lint/typecheck/build green)
 - [x] Pre-Task-2 architectural review → docs/DB-DECISIONS.md (12 frozen decisions, 8 evolve-later, 7 applied recommendations; resolves BLUEPRINT §8 open item 2 — availability recurrence model)
 - [x] Task 2 (code): 7 migrations (16 tables, RLS everywhere, triggers) + idempotent seed (Cherry + demo org) + ai_profiles.json
-- [ ] Task 2 (apply): blocked on Supabase project creation (founder) — apply steps in RUNBOOK.md → Migrations
+- [x] Task 2 (apply): 7 migrations pushed to `bodybalance-platform` (cklgjwqhnttrpggnfpgy), seeded, guard suite 5/5 OK — 2026-07-08
 - [ ] Sprint 4 carry-over: migrate data/knowledge_base.jsonl content into knowledge_documents WITH embeddings (needs LLM key + embedding pipeline)
 - [ ] Task 3 prerequisite: staff users seeding happens through Supabase Auth signup (auth.users FK), not seed.sql
 - [ ] Task 3: Auth (Supabase Auth) + organization context resolution
@@ -17,7 +17,7 @@ Working state for the implementation of BLUEPRINT.md v1.0. Updated continuously.
 ## Blockers / waiting on founder
 
 - [ ] **OpenAI key rotation** (BLUEPRINT 4.5): log in to platform.openai.com → API keys → revoke the key currently in `.streamlit/secrets.toml` → create a replacement → update Streamlit Cloud app secrets (App → Settings → Secrets) so Cherry's live app keeps working. Do NOT commit the new key anywhere.
-- [ ] **Supabase project creation** (needed at Task 2): create a free-tier project at supabase.com; I'll provide exact steps when Task 2 reaches that point.
+- [x] **Supabase project created** — `bodybalance-platform`, eu-west-2 (London), free tier. Done 2026-07-08.
 
 ## Assumptions on record
 
