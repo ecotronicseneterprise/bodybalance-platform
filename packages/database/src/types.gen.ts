@@ -384,6 +384,57 @@ export type Database = {
           },
         ]
       }
+      feedback: {
+        Row: {
+          body: string | null
+          category: string
+          created_at: string
+          id: string
+          organization_id: string
+          priority: string
+          status: string
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          body?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          organization_id: string
+          priority?: string
+          status?: string
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          body?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          organization_id?: string
+          priority?: string
+          status?: string
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       knowledge_document_versions: {
         Row: {
           content: string
