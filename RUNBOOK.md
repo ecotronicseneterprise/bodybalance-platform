@@ -117,11 +117,32 @@ exists, rollback is always a new inverse migration, never an edit.
 | 2026-07-08 | Corrected migration 1 pre-apply (`check_function_bodies = off`) | Claude | Exception to additive-only rule invoked transparently: migration had never been applied to any environment (failed on first push; transaction rolled back). Rule protects applied history only. |
 | 2026-07-08 | `supabase link` + `db push` (7 migrations) + seed + guard verification (5/5 OK) | Claude | via CLI with `.secrets/` credentials |
 
+## Deployment pipeline (Sprint 1.5, established 2026-07-08)
+
+| Item | Value |
+|---|---|
+| Platform repo | `github.com/ecotronicseneterprise/bodybalance-platform` (make **Private** — founder action) |
+| Legacy repo | `github.com/cliffordnwanna/BODYBALANCE.AI` (public, serves Cherry's Streamlit app until Sprint 5 cutover) |
+| Local remotes | `origin` = legacy repo, `platform` = platform repo. Push: `git push platform sprint-1/foundation:main` |
+| Vercel project | `bodybalance-platform` (Hobby, Clifford's projects), **Root Directory: `apps/admin`**, framework Next.js |
+| Production URL | https://bodybalance-platform.vercel.app |
+| Auto-deploy | every push to `main` → Production; other branches → Preview deployments |
+| Env vars | 4 vars (see Environment variables section) pasted from `.secrets/vercel-env-admin.txt` (regenerate: `node scripts/write-vercel-env.mjs`), applied to Production + Preview |
+| Supabase Auth | site_url = production URL; redirect allowlist = production + preview wildcard + `http://localhost:3001` `/auth/confirm` (set via management API — PATCH `/v1/projects/<ref>/config/auth`) |
+| Rollback | Vercel dashboard → Deployments → previous deployment → "Promote to Production" (instant); code rollback = revert commit + push |
+
+Deploy-failure log (issues surfaced and fixed by this sprint):
+1. Python-era `.gitignore` `lib/` pattern had excluded `apps/admin/src/lib/` from git entirely (fixed: anchored patterns, commit `b36c9f63`).
+2. Windows-generated lockfile lacked Linux native binaries for Tailwind (`@tailwindcss/oxide`, `lightningcss`) (fixed: clean lockfile regeneration, commit `e9828c7d`).
+
+Smoke results (2026-07-08): `/` `/onboarding` `/feedback` → 307 to login (middleware gate live in prod); `/login` `/signup` → 200; verify-auth 4/4 against the same DB the deployment uses. Browser-level cookie flow: founder manual checklist (see TODO).
+
 ## Accepted risks
 
 | Risk | Assessment | Revisit when |
 |---|---|---|
-| `npm audit`: moderate advisory GHSA-qx2v-qp2m-jg93 (postcss <8.5.10, XSS in CSS stringify) via `next@15.5.20`'s internally pinned postcss 8.4.31. npm `overrides` cannot replace Next's nested copy. | Build-time only: postcss here processes our own Tailwind source during `next build`; no untrusted CSS ever flows through it; not part of the runtime server. Root `overrides` does patch the top-level postcss used by @tailwindcss/postcss. | Bump `next` when a release ships postcss ≥8.5.10; re-run `npm audit`. |
+| ~~`npm audit`: moderate advisory GHSA-qx2v-qp2m-jg93 (postcss <8.5.10) via next's pinned postcss~~ **RESOLVED 2026-07-08**: clean lockfile regeneration picked a patched Next release; `npm audit` reports 0 vulnerabilities. | — | — |
+| Vercel Preview deployments share the production Supabase project (no staging DB). | Acceptable during internal alpha — no real patient data yet. | Before Cherry starts entering real patient data: create a separate Supabase project for previews, or disable preview deploys. |
 
 ## Outstanding operational items
 

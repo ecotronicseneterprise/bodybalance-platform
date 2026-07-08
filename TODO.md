@@ -19,6 +19,16 @@ Working state for the implementation of BLUEPRINT.md v1.0. Updated continuously.
 - [ ] Task 4: Domain layer (`packages/domain` services + repositories) + event bus (`packages/events`) + audit log subscriber
 - [ ] Task 5: Admin dashboard foundation
 
+## Sprint 1.5 — Deployment (2026-07-08)
+
+- [x] Platform pushed to `ecotronicseneterprise/bodybalance-platform` (main)
+- [x] Vercel project live: https://bodybalance-platform.vercel.app (root dir apps/admin, 4 env vars, auto-deploy on push)
+- [x] Supabase Auth site_url + redirect allowlist configured (prod, preview wildcard, localhost)
+- [x] HTTP smoke: public routes 200, protected routes 307→login; verify-auth 4/4
+- [ ] Founder browser walkthrough on the live URL: signup (+test email) → email link → onboarding → dashboard → submit feedback → logout → login
+- [ ] Founder: make `bodybalance-platform` repo **Private** (deploy is green — no reason to stay public)
+- [ ] apps/web Vercel project — deferred to Sprint 3 when the patient site has content
+
 ## Blockers / waiting on founder
 
 - [ ] **OpenAI key rotation** (BLUEPRINT 4.5): log in to platform.openai.com → API keys → revoke the key currently in `.streamlit/secrets.toml` → create a replacement → update Streamlit Cloud app secrets (App → Settings → Secrets) so Cherry's live app keeps working. Do NOT commit the new key anywhere.
