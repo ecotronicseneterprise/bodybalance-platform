@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import type { NavItem } from "@bodybalance/ui";
+import { Button, type NavItem } from "@bodybalance/ui";
 import { createClient } from "@/lib/supabase/server";
 import { ShellClient } from "./shell-client";
 
@@ -31,17 +31,19 @@ export default async function DashboardLayout({
     .select("id", { count: "exact", head: true })
     .eq("status", "pending_confirmation");
 
-  // Final nav per docs/SPRINT-2-PLAN.md. "Practitioners" is the neutral
-  // default label — 2B makes it clinic-configurable via terminology settings.
+  // Final nav per docs/SPRINT-2-PLAN.md. Every item routes to a real,
+  // intentional page — sections without functionality yet show designed
+  // empty states, never blanks. "Practitioners" label becomes clinic-
+  // configurable via terminology settings in 2B.
   const nav: NavItem[] = [
     { label: "Dashboard", href: "/", live: true },
-    { label: "Appointments", href: "#", live: false, badge: pendingCount ?? 0 },
-    { label: "Patients", href: "#", live: false },
-    { label: "Services", href: "#", live: false },
-    { label: "Practitioners", href: "#", live: false },
-    { label: "Knowledge", href: "#", live: false },
-    { label: "AI Assistant", href: "#", live: false },
-    { label: "Clinic Settings", href: "#", live: false },
+    { label: "Appointments", href: "/appointments", live: true, badge: pendingCount ?? 0 },
+    { label: "Patients", href: "/patients", live: true },
+    { label: "Services", href: "/services", live: true },
+    { label: "Practitioners", href: "/practitioners", live: true },
+    { label: "Knowledge", href: "/knowledge", live: true },
+    { label: "AI Assistant", href: "/ai-assistant", live: true },
+    { label: "Clinic Settings", href: "/clinic-settings", live: true },
     { label: "Feedback", href: "/feedback", live: true },
   ];
 
@@ -53,9 +55,9 @@ export default async function DashboardLayout({
       nav={nav}
       signOutSlot={
         <form action="/auth/signout" method="post">
-          <button className="w-full rounded-lg border border-line px-3 py-2 text-sm font-medium text-ink/70 hover:bg-ground">
+          <Button variant="secondary" size="sm" className="w-full">
             Sign out
-          </button>
+          </Button>
         </form>
       }
     >

@@ -62,7 +62,7 @@ export function OnboardingForm() {
           value={clinicName}
           onChange={(e) => setClinicName(e.target.value)}
           placeholder="e.g. Harborview Clinic"
-          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none"
         />
       </div>
       <div>
@@ -75,7 +75,7 @@ export function OnboardingForm() {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder="e.g. Dr. Amina Bello"
-          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none"
         />
       </div>
       <div className="grid grid-cols-2 gap-4">
@@ -88,7 +88,7 @@ export function OnboardingForm() {
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="Lagos"
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none"
           />
         </div>
         <div>
@@ -99,7 +99,7 @@ export function OnboardingForm() {
             id="timezone"
             value={timezone}
             onChange={(e) => setTimezone(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none"
           >
             {TIMEZONES.map((tz) => (
               <option key={tz} value={tz}>
@@ -118,7 +118,7 @@ export function OnboardingForm() {
           value={whatsapp}
           onChange={(e) => setWhatsapp(e.target.value)}
           placeholder="+2348012345678"
-          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-brand focus:outline-none"
         />
         <p className="mt-1 text-xs text-muted">
           Used for appointment notifications. You can add it later.
@@ -134,7 +134,7 @@ export function OnboardingForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-brand-deep disabled:opacity-50"
+        className="w-full rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep disabled:opacity-50"
       >
         {loading ? "Creating your clinic…" : "Create clinic"}
       </button>

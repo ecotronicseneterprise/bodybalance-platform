@@ -11,6 +11,9 @@
  */
 
 export { Button, type ButtonProps } from "./button.tsx";
+export { EmptyState, type EmptyStateProps } from "./empty-state.tsx";
+export { PageHeader, type PageHeaderProps } from "./page-header.tsx";
+export { SetupProgress, type SetupItem } from "./setup-progress.tsx";
 export { Field, Input, Select, Textarea, type FieldProps } from "./form.tsx";
 export { Card } from "./card.tsx";
 export { Skeleton } from "./skeleton.tsx";
