@@ -19,12 +19,12 @@ export default async function OnboardingPage() {
   if (existing) redirect("/");
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <div className="w-full max-w-lg rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+    <main className="flex min-h-screen items-center justify-center bg-ground p-6">
+      <div className="w-full max-w-lg rounded-2xl border border-line bg-white shadow-card p-8 ">
         <h1 className="text-xl font-semibold tracking-tight">
           Set up your clinic
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-muted">
           Review the details below — everything can be changed later in
           Settings.
         </p>

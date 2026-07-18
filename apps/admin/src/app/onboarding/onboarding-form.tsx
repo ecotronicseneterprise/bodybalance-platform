@@ -53,7 +53,7 @@ export function OnboardingForm() {
   return (
     <form onSubmit={handleSubmit} className="mt-6 space-y-4">
       <div>
-        <label htmlFor="clinicName" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="clinicName" className="block text-sm font-medium text-ink">
           Clinic name *
         </label>
         <input
@@ -62,11 +62,11 @@ export function OnboardingForm() {
           value={clinicName}
           onChange={(e) => setClinicName(e.target.value)}
           placeholder="e.g. Harborview Clinic"
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-700 focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
         />
       </div>
       <div>
-        <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="fullName" className="block text-sm font-medium text-ink">
           Your full name *
         </label>
         <input
@@ -75,12 +75,12 @@ export function OnboardingForm() {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           placeholder="e.g. Dr. Amina Bello"
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-700 focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
         />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="city" className="block text-sm font-medium text-ink">
             City
           </label>
           <input
@@ -88,18 +88,18 @@ export function OnboardingForm() {
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="Lagos"
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-700 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
           />
         </div>
         <div>
-          <label htmlFor="timezone" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="timezone" className="block text-sm font-medium text-ink">
             Timezone
           </label>
           <select
             id="timezone"
             value={timezone}
             onChange={(e) => setTimezone(e.target.value)}
-            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-700 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
           >
             {TIMEZONES.map((tz) => (
               <option key={tz} value={tz}>
@@ -110,7 +110,7 @@ export function OnboardingForm() {
         </div>
       </div>
       <div>
-        <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="whatsapp" className="block text-sm font-medium text-ink">
           Clinic WhatsApp number
         </label>
         <input
@@ -118,15 +118,15 @@ export function OnboardingForm() {
           value={whatsapp}
           onChange={(e) => setWhatsapp(e.target.value)}
           placeholder="+2348012345678"
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-700 focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm focus:border-brand focus:outline-none"
         />
-        <p className="mt-1 text-xs text-gray-400">
+        <p className="mt-1 text-xs text-muted">
           Used for appointment notifications. You can add it later.
         </p>
       </div>
 
       {error ? (
-        <p role="alert" className="text-sm text-red-600">
+        <p role="alert" className="text-sm text-danger">
           {error}
         </p>
       ) : null}
@@ -134,11 +134,11 @@ export function OnboardingForm() {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-md bg-green-800 px-4 py-2 text-sm font-medium text-white hover:bg-green-900 disabled:opacity-50"
+        className="w-full rounded-lg bg-brand px-4 py-2 text-sm font-medium text-white hover:bg-brand-deep disabled:opacity-50"
       >
         {loading ? "Creating your clinic…" : "Create clinic"}
       </button>
-      <p className="text-center text-xs text-gray-400">
+      <p className="text-center text-xs text-muted">
         You&apos;ll be the clinic owner. Default opening hours (Mon–Fri 9–5)
         are applied — adjust them in Settings.
       </p>

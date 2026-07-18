@@ -1,3 +1,4 @@
+import { Card } from "@bodybalance/ui";
 import { createClient } from "@/lib/supabase/server";
 import { FeedbackForm } from "./feedback-form";
 
@@ -17,9 +18,9 @@ export default async function FeedbackPage() {
     .limit(50);
 
   return (
-    <main className="mx-auto max-w-2xl p-8">
-      <h1 className="text-xl font-semibold tracking-tight">Feedback</h1>
-      <p className="mt-1 text-sm text-gray-500">
+    <div className="mx-auto max-w-2xl px-4 py-6 md:px-8 md:py-8">
+      <h1 className="text-xl font-semibold tracking-tight text-ink">Feedback</h1>
+      <p className="mt-1 text-sm text-muted">
         Tell us what you need to run your clinic better — workflow gaps matter
         more to us than anything else.
       </p>
@@ -30,37 +31,39 @@ export default async function FeedbackPage() {
 
       <div className="mt-8 space-y-3">
         {(entries ?? []).map((f) => (
-          <div key={f.id} className="rounded-lg border border-gray-200 bg-white p-4">
-            <div className="flex items-center justify-between gap-2">
-              <p className="font-medium">{f.title}</p>
-              <div className="flex shrink-0 gap-1">
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-gray-600">
+          <Card key={f.id} className="p-4">
+            <div className="flex items-start justify-between gap-3">
+              <p className="font-medium text-ink">{f.title}</p>
+              <div className="flex shrink-0 flex-wrap justify-end gap-1">
+                <span className="rounded-full bg-lavender px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-deep">
                   {CATEGORY_LABEL[f.category] ?? f.category}
                 </span>
                 <span
-                  className={`rounded px-1.5 py-0.5 text-[10px] uppercase tracking-wide ${
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
                     f.priority === "high"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-gray-100 text-gray-600"
+                      ? "bg-danger-soft text-danger"
+                      : "bg-ground text-muted"
                   }`}
                 >
                   {f.priority}
                 </span>
-                <span className="rounded bg-green-50 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-green-800">
+                <span className="rounded-full bg-ok-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ok">
                   {f.status}
                 </span>
               </div>
             </div>
-            {f.body ? <p className="mt-1 text-sm text-gray-600">{f.body}</p> : null}
-            <p className="mt-2 text-xs text-gray-400">
+            {f.body ? <p className="mt-1 text-sm text-muted">{f.body}</p> : null}
+            <p className="mt-2 text-xs text-muted/70">
               {new Date(f.created_at).toLocaleString()}
             </p>
-          </div>
+          </Card>
         ))}
         {(entries ?? []).length === 0 ? (
-          <p className="text-sm text-gray-400">No feedback yet.</p>
+          <p className="text-center text-sm text-muted">
+            No feedback yet — you&apos;ll be the first.
+          </p>
         ) : null}
       </div>
-    </main>
+    </div>
   );
 }

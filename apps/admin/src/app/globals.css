@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+/* Scan the shared component package for utility classes */
+@source "../../../../packages/ui/src";
+
+/* BodyBalance PLATFORM design tokens (SPRINT-2-PLAN 2A; mockups v2).
+   This is the platform's identity for the admin app. The patient site
+   (Sprint 3) renders each clinic's own clinic_settings colors instead.
+   Light-only by product ruling — no dark mode until post-product. */
+@theme {
+  --color-brand: #6d4aff;
+  --color-brand-deep: #5636e0;
+  --color-lavender: #f3f0ff;
+  --color-lavender-line: #e2dbff;
+  --color-ink: #1a1523;
+  --color-muted: #6e6883;
+  --color-line: #e9e6f2;
+  --color-ground: #fafafc;
+  --color-ok: #17916b;
+  --color-ok-soft: #e5f5ef;
+  --color-warn: #b7791f;
+  --color-warn-soft: #fbf3e4;
+  --color-danger: #c2453a;
+  --color-danger-soft: #fbeae8;
+  --shadow-card: 0 1px 2px rgb(26 21 35 / 0.05), 0 4px 16px rgb(26 21 35 / 0.04);
+}
+
+:root {
+  color-scheme: light;
+}
