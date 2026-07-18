@@ -70,7 +70,7 @@ export default function LoginPage() {
           </div>
 
           {error ? (
-            <p role="alert" className="text-sm text-red-600">
+            <p role="alert" className="text-sm text-danger">
               {error}
             </p>
           ) : null}
@@ -78,10 +78,17 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-md bg-green-800 px-4 py-2 text-sm font-medium text-white hover:bg-green-900 disabled:opacity-50"
+            className="w-full rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-deep disabled:opacity-50"
           >
             {loading ? "Signing in…" : "Sign in"}
           </button>
+
+          <a
+            href="/reset-password"
+            className="block text-center text-sm text-muted hover:text-ink"
+          >
+            Forgot your password?
+          </a>
         </form>
       </div>
     </main>
