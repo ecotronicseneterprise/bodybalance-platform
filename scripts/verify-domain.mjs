@@ -5,7 +5,7 @@
  * with the event bus feeding the audit subscriber.
  *
  * Checks:
- *  1. getBookableSlots returns deterministic slots for the demo therapist
+ *  1. getBookableSlots returns deterministic slots for the demo practitioner
  *  2. requestBooking creates a pending_confirmation appointment
  *  3. same slot again through the SERVICE -> slot_unavailable
  *  4. AI actor cannot transition status (5.2 rule 3, defense in depth)
@@ -26,7 +26,7 @@ import {
 
 const read = (p) => readFileSync(p, "utf8").trim();
 const DEMO_ORG = "00000000-0000-4000-a000-000000000002";
-const DEMO_THERAPIST = "00000000-0000-4000-b000-000000000002";
+const DEMO_PRACTITIONER = "00000000-0000-4000-b000-000000000002";
 const DEMO_SERVICE = "00000000-0000-4000-c000-000000000003";
 
 const dbUrl = `postgresql://postgres.cklgjwqhnttrpggnfpgy:${encodeURIComponent(
@@ -43,7 +43,7 @@ let appointmentId, patientId;
 
 try {
   // 1 — deterministic slots
-  const { slots } = await getBookableSlots(deps, DEMO_THERAPIST, DEMO_SERVICE);
+  const { slots } = await getBookableSlots(deps, DEMO_PRACTITIONER, DEMO_SERVICE);
   results.push(["bookable slots computed", slots.length > 0 ? `OK — ${slots.length} slots, first ${slots[0].toISOString()}` : "FAIL — no slots"]);
 
   // 2 — booking lands pending
@@ -53,7 +53,7 @@ try {
       organizationId: DEMO_ORG,
       patient: { fullName: "Verify Domain Bot", phone: "+2340000000099" },
       serviceId: DEMO_SERVICE,
-      therapistId: DEMO_THERAPIST,
+      practitionerId: DEMO_PRACTITIONER,
       slotStart: slots[0],
       source: "ai_chat",
       qualificationSummary: { pain_location: "lower back", severity: 5 },
@@ -72,7 +72,7 @@ try {
         organizationId: DEMO_ORG,
         patient: { fullName: "Second Bot", phone: "+2340000000098" },
         serviceId: DEMO_SERVICE,
-        therapistId: DEMO_THERAPIST,
+        practitionerId: DEMO_PRACTITIONER,
         slotStart: slots[0],
         source: "ai_chat",
       },

@@ -2,7 +2,7 @@
   "name": "@bodybalance/admin",
   "version": "0.1.0",
   "private": true,
-  "description": "Clinic staff dashboard: bookings, services, therapists, knowledge, settings (BLUEPRINT 4.1). platform_policy is never exposed here (BLUEPRINT 3.13a).",
+  "description": "Clinic staff dashboard: bookings, services, practitioners, knowledge, settings (BLUEPRINT 4.1). platform_policy is never exposed here (BLUEPRINT 3.13a).",
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",

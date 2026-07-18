@@ -61,7 +61,7 @@ export function OnboardingForm() {
           required
           value={clinicName}
           onChange={(e) => setClinicName(e.target.value)}
-          placeholder="e.g. BodyBalance Clinic"
+          placeholder="e.g. Harborview Clinic"
           className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-700 focus:outline-none"
         />
       </div>
@@ -74,7 +74,7 @@ export function OnboardingForm() {
           required
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          placeholder="e.g. Cherry Nwanna"
+          placeholder="e.g. Dr. Amina Bello"
           className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-700 focus:outline-none"
         />
       </div>

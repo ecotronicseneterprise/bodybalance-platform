@@ -2,14 +2,19 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+// Final nav order per docs/SPRINT-2-PLAN.md. "Practitioners" is the neutral
+// default label — 2B makes it clinic-configurable via terminology settings
+// (a dental clinic sees "Dentists"); the DB table name never surfaces in UI.
 const NAV = [
   { label: "Dashboard", href: "/", live: true },
-  { label: "Feedback", href: "/feedback", live: true },
   { label: "Appointments", href: "#", live: false },
+  { label: "Patients", href: "#", live: false },
   { label: "Services", href: "#", live: false },
-  { label: "Therapists", href: "#", live: false },
+  { label: "Practitioners", href: "#", live: false },
   { label: "Knowledge", href: "#", live: false },
-  { label: "Settings", href: "#", live: false },
+  { label: "AI Assistant", href: "#", live: false },
+  { label: "Clinic Settings", href: "#", live: false },
+  { label: "Feedback", href: "/feedback", live: true },
 ];
 
 export default async function DashboardLayout({

@@ -61,7 +61,7 @@ export default async function DashboardHome() {
         ))}
       </div>
       <p className="mt-8 text-sm text-gray-500">
-        Appointment queues, services, therapists, and knowledge management
+        Appointment queues, services, practitioners, and knowledge management
         arrive in Sprint 2. Use <strong>Feedback</strong> to capture anything
         you need while running the clinic — every entry lands directly with
         the team.

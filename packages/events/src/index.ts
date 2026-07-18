@@ -22,7 +22,7 @@ export interface DomainEvents {
     organizationId: string;
     appointmentId: string;
     patientId: string;
-    therapistId: string;
+    practitionerId: string;
     serviceId: string;
     scheduledStart: string; // ISO
     source: "ai_chat" | "manual";

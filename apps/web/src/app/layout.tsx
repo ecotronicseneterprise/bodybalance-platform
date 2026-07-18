@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "BodyBalance",
   description:
-    "AI-powered front desk for physiotherapy clinics — understand your pain, get educated guidance, and book with a licensed physiotherapist.",
+    "The AI-powered front desk for clinics — patients get clear guidance and book with licensed practitioners, 24/7.",
 };
 
 export default function RootLayout({

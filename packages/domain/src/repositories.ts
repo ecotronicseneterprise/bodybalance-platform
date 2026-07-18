@@ -16,7 +16,7 @@ export interface ServiceRow {
   active: boolean;
 }
 
-export interface TherapistRow {
+export interface PractitionerRow {
   id: string;
   display_name: string;
   credentials: string | null;
@@ -43,17 +43,17 @@ export async function getActiveService(
   return (rows[0] as ServiceRow | undefined) ?? null;
 }
 
-export async function getActiveTherapist(
+export async function getActivePractitioner(
   db: DbClient,
-  therapistId: string,
-): Promise<TherapistRow | null> {
+  practitionerId: string,
+): Promise<PractitionerRow | null> {
   const { rows } = await db.query(
     `select id, display_name, credentials, active
        from therapists
       where id = $1 and active and deleted_at is null`,
-    [therapistId],
+    [practitionerId],
   );
-  return (rows[0] as TherapistRow | undefined) ?? null;
+  return (rows[0] as PractitionerRow | undefined) ?? null;
 }
 
 export async function getClinicSettings(db: DbClient): Promise<ClinicSettingsRow | null> {
@@ -67,7 +67,7 @@ export async function getClinicSettings(db: DbClient): Promise<ClinicSettingsRow
 
 export async function getAvailabilityWindows(
   db: DbClient,
-  therapistId: string,
+  practitionerId: string,
 ): Promise<AvailabilityWindow[]> {
   const { rows } = await db.query(
     `select day_of_week, to_char(specific_date, 'YYYY-MM-DD') as specific_date,
@@ -76,14 +76,14 @@ export async function getAvailabilityWindows(
             is_blocked
        from therapist_availability
       where therapist_id = $1`,
-    [therapistId],
+    [practitionerId],
   );
   return rows as AvailabilityWindow[];
 }
 
 export async function getLiveAppointments(
   db: DbClient,
-  therapistId: string,
+  practitionerId: string,
   from: Date,
   to: Date,
 ): Promise<BusyInterval[]> {
@@ -93,7 +93,7 @@ export async function getLiveAppointments(
       where therapist_id = $1
         and status in ('pending_confirmation', 'confirmed')
         and scheduled_end > $2 and scheduled_start < $3`,
-    [therapistId, from.toISOString(), to.toISOString()],
+    [practitionerId, from.toISOString(), to.toISOString()],
   );
   return (rows as { scheduled_start: string; scheduled_end: string }[]).map((r) => ({
     start: new Date(r.scheduled_start),
@@ -141,7 +141,7 @@ export async function findOrCreatePatient(
 export interface NewAppointment {
   organizationId: string;
   patientId: string;
-  therapistId: string;
+  practitionerId: string;
   serviceId: string;
   scheduledStart: Date;
   scheduledEnd: Date;
@@ -165,7 +165,7 @@ export async function insertPendingAppointment(
     [
       a.organizationId,
       a.patientId,
-      a.therapistId,
+      a.practitionerId,
       a.serviceId,
       a.scheduledStart.toISOString(),
       a.scheduledEnd.toISOString(),

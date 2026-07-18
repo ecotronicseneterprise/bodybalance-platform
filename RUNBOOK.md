@@ -116,6 +116,8 @@ exists, rollback is always a new inverse migration, never an edit.
 | 2026-07-08 | Created Supabase project `bodybalance-platform` (ref `cklgjwqhnttrpggnfpgy`, eu-west-2 London, free tier) | Founder | credentials in founder's password manager + `.secrets/` |
 | 2026-07-08 | Corrected migration 1 pre-apply (`check_function_bodies = off`) | Claude | Exception to additive-only rule invoked transparently: migration had never been applied to any environment (failed on first push; transaction rolled back). Rule protects applied history only. |
 | 2026-07-08 | `supabase link` + `db push` (7 migrations) + seed + guard verification (5/5 OK) | Claude | via CLI with `.secrets/` credentials |
+| 2026-07-18 | Supabase free-tier project auto-paused after 7 idle days (last activity 2026-07-11); restored via dashboard | Founder | Symptom: pooler returns "tenant/user not found". See Accepted risks. |
+| 2026-07-18 | Migration 11 (`20260711100000_multi_vertical`) pushed + verified: ai_profile CHECK dropped (0 remaining), `clinic_settings.terminology` added; types regenerated from live schema (1091 lines, empty-output guard now in procedure) | Claude | part of multi-vertical de-hardcoding |
 
 ## Deployment pipeline (Sprint 1.5, established 2026-07-08)
 
@@ -143,6 +145,7 @@ Smoke results (2026-07-08): `/` `/onboarding` `/feedback` → 307 to login (midd
 |---|---|---|
 | ~~`npm audit`: moderate advisory GHSA-qx2v-qp2m-jg93 (postcss <8.5.10) via next's pinned postcss~~ **RESOLVED 2026-07-08**: clean lockfile regeneration picked a patched Next release; `npm audit` reports 0 vulnerabilities. | — | — |
 | Vercel Preview deployments share the production Supabase project (no staging DB). | Acceptable during internal alpha — no real patient data yet. | Before Cherry starts entering real patient data: create a separate Supabase project for previews, or disable preview deploys. |
+| Supabase free tier auto-pauses the project after ~7 idle days (pooler then reports "tenant not found"; restore via dashboard takes ~2 min). | Acceptable during development. | **Pre-launch blocker:** before Cherry relies on the platform, upgrade to Pro ($25/mo) or ensure sustained traffic — a paused DB means a dead product. |
 
 ## Outstanding operational items
 

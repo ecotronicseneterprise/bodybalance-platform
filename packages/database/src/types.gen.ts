@@ -336,6 +336,7 @@ export type Database = {
           logo_url: string | null
           opening_hours: Json
           organization_id: string
+          terminology: Json
           timezone: string
           updated_at: string
           whatsapp_number: string | null
@@ -353,6 +354,7 @@ export type Database = {
           logo_url?: string | null
           opening_hours?: Json
           organization_id: string
+          terminology?: Json
           timezone?: string
           updated_at?: string
           whatsapp_number?: string | null
@@ -370,6 +372,7 @@ export type Database = {
           logo_url?: string | null
           opening_hours?: Json
           organization_id?: string
+          terminology?: Json
           timezone?: string
           updated_at?: string
           whatsapp_number?: string | null

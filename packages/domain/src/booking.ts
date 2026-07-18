@@ -23,7 +23,7 @@ import * as repo from "./repositories.ts";
 
 export type BookingErrorCode =
   | "service_not_found"
-  | "therapist_not_found"
+  | "practitioner_not_found"
   | "clinic_not_configured"
   | "slot_unavailable"
   | "invalid_transition";
@@ -42,7 +42,7 @@ export interface BookingRequest {
   organizationId: string;
   patient: repo.PatientContact;
   serviceId: string;
-  therapistId: string;
+  practitionerId: string;
   slotStart: Date;
   source: "ai_chat" | "manual";
   chatSessionId?: string;
@@ -56,7 +56,7 @@ export interface BookingReceipt {
   scheduledStart: string;
   scheduledEnd: string;
   serviceName: string;
-  therapistName: string;
+  practitionerName: string;
 }
 
 interface Deps {
@@ -67,21 +67,21 @@ interface Deps {
 
 export async function getBookableSlots(
   deps: Pick<Deps, "runner" | "now">,
-  therapistId: string,
+  practitionerId: string,
   serviceId: string,
 ): Promise<{ slots: Date[]; durationMinutes: number }> {
   return deps.runner(async (db) => {
     const [service, settings, windows] = await Promise.all([
       repo.getActiveService(db, serviceId),
       repo.getClinicSettings(db),
-      repo.getAvailabilityWindows(db, therapistId),
+      repo.getAvailabilityWindows(db, practitionerId),
     ]);
     if (!service) throw new BookingError("service_not_found", "Unknown or inactive service");
     if (!settings) throw new BookingError("clinic_not_configured", "Clinic settings missing");
 
     const now = deps.now?.() ?? new Date();
     const to = new Date(now.getTime() + settings.booking_horizon_days * 86_400_000);
-    const busy = await repo.getLiveAppointments(db, therapistId, now, to);
+    const busy = await repo.getLiveAppointments(db, practitionerId, now, to);
 
     const opts: SlotComputationOptions = {
       timeZone: settings.timezone,
@@ -102,19 +102,19 @@ export async function requestBooking(
   let patientCreated = false;
 
   const receipt = await deps.runner(async (db) => {
-    const [service, therapist, settings] = await Promise.all([
+    const [service, practitioner, settings] = await Promise.all([
       repo.getActiveService(db, req.serviceId),
-      repo.getActiveTherapist(db, req.therapistId),
+      repo.getActivePractitioner(db, req.practitionerId),
       repo.getClinicSettings(db),
     ]);
     if (!service) throw new BookingError("service_not_found", "Unknown or inactive service");
-    if (!therapist) throw new BookingError("therapist_not_found", "Unknown or inactive therapist");
+    if (!practitioner) throw new BookingError("practitioner_not_found", "Unknown or inactive practitioner");
     if (!settings) throw new BookingError("clinic_not_configured", "Clinic settings missing");
 
     const now = deps.now?.() ?? new Date();
-    const windows = await repo.getAvailabilityWindows(db, req.therapistId);
+    const windows = await repo.getAvailabilityWindows(db, req.practitionerId);
     const to = new Date(now.getTime() + settings.booking_horizon_days * 86_400_000);
-    const busy = await repo.getLiveAppointments(db, req.therapistId, now, to);
+    const busy = await repo.getLiveAppointments(db, req.practitionerId, now, to);
 
     const opts: SlotComputationOptions = {
       timeZone: settings.timezone,
@@ -143,7 +143,7 @@ export async function requestBooking(
       appointmentId = await repo.insertPendingAppointment(db, {
         organizationId: req.organizationId,
         patientId,
-        therapistId: req.therapistId,
+        practitionerId: req.practitionerId,
         serviceId: req.serviceId,
         scheduledStart: req.slotStart,
         scheduledEnd,
@@ -166,7 +166,7 @@ export async function requestBooking(
       scheduledStart: req.slotStart.toISOString(),
       scheduledEnd: scheduledEnd.toISOString(),
       serviceName: service.name,
-      therapistName: therapist.display_name,
+      practitionerName: practitioner.display_name,
     };
   });
 
@@ -184,7 +184,7 @@ export async function requestBooking(
       organizationId: req.organizationId,
       appointmentId: receipt.appointmentId,
       patientId: receipt.patientId,
-      therapistId: req.therapistId,
+      practitionerId: req.practitionerId,
       serviceId: req.serviceId,
       scheduledStart: receipt.scheduledStart,
       source: req.source,
