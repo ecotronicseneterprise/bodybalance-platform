@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { withStaffContext } from "@/lib/staff-action";
 
 export interface FeedbackFormState {
   error?: string;
@@ -19,29 +20,20 @@ export async function submitFeedback(
 
   if (!title) return { error: "A short title is required." };
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return { error: "Not signed in." };
-
-  const { data: staff } = await supabase
-    .from("users")
-    .select("organization_id")
-    .eq("id", user.id)
-    .maybeSingle();
-  if (!staff) return { error: "No clinic linked to this account." };
-
-  const { error } = await supabase.from("feedback").insert({
-    organization_id: staff.organization_id,
-    user_id: user.id,
-    title,
-    body: body || null,
-    category,
-    priority,
+  const result = await withStaffContext("submit_feedback", async (ctx) => {
+    const supabase = await createClient();
+    const { error } = await supabase.from("feedback").insert({
+      organization_id: ctx.organizationId,
+      user_id: ctx.userId,
+      title,
+      body: body || null,
+      category,
+      priority,
+    });
+    if (error) throw new Error(error.message);
   });
-  if (error) return { error: error.message };
 
+  if (!result.ok) return { error: result.error };
   revalidatePath("/feedback");
   return { ok: true };
 }

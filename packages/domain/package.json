@@ -7,7 +7,7 @@
   "types": "./src/index.ts",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test src/availability.test.ts"
+    "test": "node --test src/availability.test.ts src/permissions.test.ts"
   },
   "dependencies": {
     "@bodybalance/database": "*",

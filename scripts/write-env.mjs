@@ -28,6 +28,9 @@ DATABASE_URL=${databaseUrl}
 `;
 
 writeFileSync("apps/admin/.env.local", publicVars + serverVars);
-writeFileSync("apps/web/.env.local", publicVars + serverVars);
+// apps/web gets PUBLIC vars only (2A audit item): no service-role key, no
+// DATABASE_URL until the patient site actually needs a server data path
+// (Sprint 3) — least privilege by default.
+writeFileSync("apps/web/.env.local", publicVars);
 
-console.log("Wrote apps/admin/.env.local and apps/web/.env.local (gitignored).");
+console.log("Wrote apps/admin/.env.local (full) and apps/web/.env.local (public only).");

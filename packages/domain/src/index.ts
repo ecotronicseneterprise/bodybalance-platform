@@ -22,4 +22,11 @@ export {
   type SlotComputationOptions,
 } from "./availability.ts";
 export { registerAuditSubscribers } from "./audit.ts";
+export {
+  PERMISSIONS,
+  hasPermission,
+  assertPermission,
+  PermissionError,
+  type Permission,
+} from "./permissions.ts";
 export * as repositories from "./repositories.ts";
