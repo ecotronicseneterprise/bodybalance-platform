@@ -29,6 +29,18 @@ Working state for the implementation of BLUEPRINT.md v1.0. Updated continuously.
 - [ ] Founder: make `bodybalance-platform` repo **Private** (deploy is green — no reason to stay public)
 - [ ] apps/web Vercel project — deferred to Sprint 3 when the patient site has content
 
+## Sprint 2A — trust-test slice (2026-07-18)
+
+- [x] Permission matrix + withStaffContext (5 unit tests); feedback write folded through it
+- [x] Password reset E2E — live-verified 5/5; /auth/confirm handles both PKCE and token_hash links
+- [x] Minimal design system: tokens + Button/Field/Card/AppShell/Toast/Skeleton; all reachable pages restyled; mobile nav
+- [x] loading/error/not-found on Cherry-facing routes
+- [x] Local production smoke: 7 routes correct; tokens in compiled CSS
+- [ ] Founder: push to deploy (`git push platform sprint-1/foundation:main`), then Claude runs production smoke
+- [ ] Founder: Cherry walkthrough on her phone
+- [ ] Deferred by timebox (named, safe to defer — nothing in today's test touches them): DataTable, Dialog, EmptyState, SetupProgress, StatCard, Badge, PageHeader components; signup/onboarding conversion to shared Field components (restyled with tokens instead); Toast on auth pages; per-route error boundaries beyond global
+- [ ] Reminder: old OpenAI key file deleted from disk, but server-side revocation at platform.openai.com still recommended
+
 ## Blockers / waiting on founder
 
 - [ ] **OpenAI key rotation** (BLUEPRINT 4.5): log in to platform.openai.com → API keys → revoke the key currently in `.streamlit/secrets.toml` → create a replacement → update Streamlit Cloud app secrets (App → Settings → Secrets) so Cherry's live app keeps working. Do NOT commit the new key anywhere.

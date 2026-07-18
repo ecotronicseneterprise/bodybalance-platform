@@ -31,8 +31,8 @@ after any key rotation.
 |---|---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | both apps | Task 3 | public |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | both apps (auth, RLS-scoped reads) | Task 3 | public by design — "Publishable key" in new dashboard naming; source: `.secrets/anon-key.txt` |
-| `SUPABASE_SERVICE_ROLE_KEY` | server only (auth admin, platform jobs) | Task 3 | SECRET — bypasses RLS; source: `.secrets/service-role-key.txt` |
-| `DATABASE_URL` | server only (`withOrgContext` RLS-enforced path) | Task 3 | SECRET — IPv4 session pooler, `postgres.<ref>` user |
+| `SUPABASE_SERVICE_ROLE_KEY` | **admin app server only** (auth admin, platform jobs) | Task 3; removed from apps/web in 2A | SECRET — bypasses RLS; source: `.secrets/service-role-key.txt` |
+| `DATABASE_URL` | **admin app server only** (`withOrgContext` RLS-enforced path) | Task 3; removed from apps/web in 2A | SECRET — IPv4 session pooler, `postgres.<ref>` user |
 
 Staff account creation (until Sprint 2A self-serve onboarding):
 `node scripts/create-staff-user.mjs <email> "<full name>" <org-slug> <role>`
